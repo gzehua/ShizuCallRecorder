@@ -139,7 +139,7 @@ jobs:
         uses: actions/upload-artifact@v6
         with:
           name: apk-${{ steps.set-output.outputs.BUILD_TYPE }}
-          path: app/build/outputs/apk/${{ steps.set-output.outputs.FINAL_APK_NAME }}
+          path: app/build/outputs/apk/ShizuCallRecorder-*.apk # Pattern, all apk file that start with the app name
           retention-days: 30
           if-no-files-found: error
 
