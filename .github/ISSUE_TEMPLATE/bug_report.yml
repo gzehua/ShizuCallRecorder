@@ -83,11 +83,9 @@ body:
       label: Logs / Screenshots
       description: Add logs, error messages, screenshots, and video, if available
       placeholder: |
-        If you have a file, please upload it in one of the prior steps instead of pasting its content here.
+        If you have a file, please upload it in one of the prior steps instead of pasting its raw content here.
 
-        To export logs, you can go under the Debug section and enable Log recording. Note that this feature only record a limited amount of logs, and was added to help non-tech users report bugs.
-        
-        If you can, please also include an export of the logs from your device using logcat or any Shizuku-powered app that use logcat, so that any missing logs may be visible. Ensure you redact sensitive informations.
+        To export logs, you can go under the Debug section and enable Log recording. Note that this feature only record a limited amount of logs. If you can, include logs from your device using logcat or any Shizuku-powered app that use logcat, so that any missing logs may be visible. Ensure you redact sensitive informations.
       render: shell
     validations:
       required: false
