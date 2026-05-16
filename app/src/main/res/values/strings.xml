@@ -150,37 +150,37 @@
 
     <string name="settings_audio_source">Audio source</string>
     <string name="audio_source_voice_comm">Voice communication mic</string>
-    <string name="audio_source_voice_comm_description">Best option for call recording with echo cancellation.</string>
+    <string name="audio_source_voice_comm_description">Optimized for clear voice recording with built-in echo cancellation.</string>
 
     <string name="audio_source_mic">Standard microphone</string>
-    <string name="audio_source_mic_description">Captures the device microphone without call routing.</string>
+    <string name="audio_source_mic_description">Captures audio directly from the device main microphone. Minor noise reduction.</string>
 
     <string name="audio_source_voice_call">Voice call</string>
-    <string name="audio_source_voice_call_description">Captures both sides of the call on rooted devices.</string>
+    <string name="audio_source_voice_call_description">Records both sides of a phone calls. The raw audio, with phone tones.</string>
 
     <string name="audio_source_playback">Audio playback</string>
-    <string name="audio_source_playback_description">Captures all app audio output (respects app opt-out flags).</string>
+    <string name="audio_source_playback_description">Capture audio from other apps, except those that restrict recording (respects app opt-out flags).</string>
 
     <string name="audio_source_output">Audio output (remote submix)</string>
-    <string name="audio_source_output_description">Captures the final mixed audio rendered to the speaker.</string>
+    <string name="audio_source_output_description">Captures the final, combined audio exactly as it is sent to your speakers.</string>
 
     <string name="audio_source_mic_unprocessed">Unprocessed mic</string>
-    <string name="audio_source_mic_unprocessed_description">Raw microphone input with no AGC, echo cancellation, or noise reduction.</string>
+    <string name="audio_source_mic_unprocessed_description">Captures raw, natural microphone audio without any automatic filtering or enhancement.</string>
 
     <string name="audio_source_mic_camcorder">Camcorder mic</string>
-    <string name="audio_source_mic_camcorder_description">Microphone tuned for video recording (optimized for camera use cases).</string>
+    <string name="audio_source_mic_camcorder_description">Tuned for video recording, focusing on audio from the direction of the camera.</string>
 
     <string name="audio_source_mic_voice_recognition">Voice recognition mic</string>
     <string name="audio_source_mic_voice_recognition_description">Microphone with processing tuned for speech recognition (reduced noise).</string>
 
     <string name="audio_source_voice_call_uplink">Voice call uplink</string>
-    <string name="audio_source_voice_call_uplink_description">Captures only the local (microphone) side of a phone call. Requires root.</string>
+    <string name="audio_source_voice_call_uplink_description">Records only your side of a phone call (uplink).</string>
 
     <string name="audio_source_voice_call_downlink">Voice call downlink</string>
-    <string name="audio_source_voice_call_downlink_description">Captures only the remote (earpiece) side of a phone call. Requires root.</string>
+    <string name="audio_source_voice_call_downlink_description">Records only the other person side of a phone call (downlink).</string>
 
     <string name="audio_source_voice_performance">Voice performance</string>
-    <string name="audio_source_voice_performance_description">Low-latency mic for live performance or musical applications (API 29+).</string>
+    <string name="audio_source_voice_performance_description">High-speed microphone mode designed for live music and real-time audio apps.</string>
 
     <!-- Settings Screen: Debug Section -->
     <string name="settings_debug_logging_enabled">Enable log recording</string>

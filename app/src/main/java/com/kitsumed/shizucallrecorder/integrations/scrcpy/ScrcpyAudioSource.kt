@@ -85,7 +85,7 @@ enum class ScrcpyAudioSource(
         descriptionResId  = R.string.audio_source_voice_call_uplink_description,
         minApi            = 4,
         maxApi            = null,
-        isDebugOnly       = true
+        isDebugOnly       = false
     ),
 
     /**
@@ -98,7 +98,7 @@ enum class ScrcpyAudioSource(
         descriptionResId  = R.string.audio_source_voice_call_downlink_description,
         minApi            = 4,
         maxApi            = null,
-        isDebugOnly       = true
+        isDebugOnly       = false
     ),
 
     /**
