@@ -89,7 +89,7 @@ jobs:
             echo "FINAL_APK_NAME=ShizuCallRecorder-${{ inputs.version }}-debug.apk" >> $GITHUB_OUTPUT
           else
             echo "BUILD_TYPE=release" >> $GITHUB_OUTPUT
-            echo "FINAL_FINAL_APK_NAME=ShizuCallRecorder-${{ inputs.version }}.apk" >> $GITHUB_OUTPUT
+            echo "FINAL_APK_NAME=ShizuCallRecorder-${{ inputs.version }}.apk" >> $GITHUB_OUTPUT
           fi
       
       # Set up signing for release builds
