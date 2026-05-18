@@ -10,7 +10,7 @@ Ever since the release of Android 4.4 KitKat (API 19), native 3rd-party phone ca
 no [visible effort](https://issuetracker.google.com/issues/128677410) from Android/Google in the following years to provide developers with [any compromises or runtime permissions](https://issuetracker.google.com/issues/112602629).
 (They have claimed to have been working on one, but I personally have never seen anything concrete, and it’s been a couple of years.)
 
-Meanwhile, proprietary apps like the Google Dialer and OEM apps can use that restricted permission, and some do have the recording feature. However, they often choose not to offer it to most users, or they add their own proprietary rules on top of it, even if it is legal in the user country.
+Meanwhile, proprietary apps like the Google Dialer and OEM apps can use that restricted permission, and some do have the recording feature. However, they often choose not to offer it to most users, or they add their own proprietary rules on top of it, even if it is legal in the user country. Their apps are also often privacy invasive with telemetry or tracking in general. 
 
 Shizuku is the workaround to this issue. **I would recommend you read [Shizuku About Page](https://github.com/thedjchi/Shizuku/wiki/About) wiki to have a very basic understanding** of why we need this.
 If you are curious about the security aspects and how it works in more detail, you can read my blog post: **[What Is Shizuku? How Does It Work? Security Implications?](https://kitsumed.github.io/blog/posts/what-is-shizuku_how-does-it-work_security-implications/)**.  
