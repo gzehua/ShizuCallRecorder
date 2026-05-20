@@ -74,5 +74,7 @@ When this option is enabled, the application will behave as follows:
 - If you press the start recording button, or if an auto-recording rule is triggered, **Shizuku will start automatically**.  
 - When you end the call, **Shizuku will automatically stop**.
 
+> If you plan on using this method, note that its reliability could be improved even further! You can support the issue at [GitHub](https://github.com/thedjchi/Shizuku/issues/158). Please do not harass the maintainer, show your support by reacting with an emoji or explaining why this would be useful to you (in this case, for this application).
+
 >[!WARNING]
 > As mentioned earlier, recording may take a few seconds because Shizuku needs to start. If you enable **Start only when recording**, be aware that audio will **not start recording immediately** when you press the button.
