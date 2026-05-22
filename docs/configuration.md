@@ -6,11 +6,12 @@
 > This guide also assumes you have read the [disclaimer](../README.md#disclaimer) and are following the law.
 
 ## Introduction
-Ever since the release of Android 4.4 KitKat (API 19), native 3rd-party phone call recording apps have been [killed](https://issuetracker.google.com/issues/37127141) for valid [privacy](https://issuetracker.google.com/issues/137210607#comment8) reasons, with
-no [visible effort](https://issuetracker.google.com/issues/128677410) from Android/Google in the following years to provide developers with [any compromises or runtime permissions](https://issuetracker.google.com/issues/112602629).
-(They have claimed to have been working on one, but I personally have never seen anything concrete, and it’s been a couple of years.)
+Ever release of Android 4.4 KitKat (API 19) / Android 6, native 3rd-party phone call recording apps have been [killed](https://issuetracker.google.com/issues/37127141) for valid [privacy](https://issuetracker.google.com/issues/137210607#comment8) reasons, with
+no [visible effort](https://issuetracker.google.com/issues/128677410) from Android/Google in the following years to provide developers with [any compromises or runtime permissions](https://issuetracker.google.com/issues/112602629). In fact, in the following years, they kept closing work-around developers had founds to bypass the restrictions.
 
-Meanwhile, proprietary apps like the Google Dialer and OEM apps can use that restricted permission, and some do have the recording feature. However, they often choose not to offer it to most users, or they add their own proprietary rules on top of it, even if it is legal in the user country. Their apps are also often privacy invasive with telemetry or tracking in general. 
+In an Android 11 development build, they created and new permission [`ACCESS_CALL_AUDIO`](https://web.archive.org/web/20240803000244/https://developer.android.com/sdk/api_diff/r-dp2/changes/android.Manifest.permission) and accorded it to the default phone dialer (still limited but better than nothing) that would allow call recording, only to [quickly revert](https://issuetracker.google.com/issues/158923887) it while claiming, "[Feature has been postponed](https://android.googlesource.com/platform/frameworks/av/+/57a3769fb12dc8b2df457e0919850bd976716706) [...] [we're not doing this in R](https://android.googlesource.com/platform/packages/apps/PackageInstaller/+/d67ba72fbe34573ec5b5e88ddfd3ef1086922d7b)"
+
+Meanwhile, proprietary apps like the Google Dialer and OEM apps can use the restricted permission `CAPTURE_AUDIO_OUTPUT`, and some do have the recording feature. However, they often choose not to offer it to most users, or they add their own proprietary rules on top of it, even if it is legal in the user country. Their apps are also often privacy invasive with telemetry or tracking in general. 
 
 Shizuku is the workaround to this issue. **I would recommend you read [Shizuku About Page](https://github.com/thedjchi/Shizuku/wiki/About) wiki to have a very basic understanding** of why we need this.
 If you are curious about the security aspects and how it works in more detail, you can read my blog post: **[What Is Shizuku? How Does It Work? Security Implications?](https://kitsumed.github.io/blog/posts/what-is-shizuku_how-does-it-work_security-implications/)**.  
