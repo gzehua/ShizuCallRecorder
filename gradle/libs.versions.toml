@@ -9,7 +9,7 @@ androidxAppcompat = "1.7.1"
 
 # Compose
 kotlin = "2.3.21"
-composeBom = "2026.05.00"
+composeBom = "2026.05.01"
 
 # Shizuku
 shizuku-api = "13.1.5"
@@ -17,7 +17,7 @@ shizuku-provider = "13.1.5"
 
 # Utility
 aboutlibraries = "14.2.0"
-libphonenumber = "9.0.30"
+libphonenumber = "9.0.31"
 
 [libraries]
 # AndroidX Core & Lifecycle
