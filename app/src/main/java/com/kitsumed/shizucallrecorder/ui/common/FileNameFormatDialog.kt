@@ -157,13 +157,11 @@ fun FileNameFormatDialog(
 private fun SettingsScreenPreview() {
     ShizucallrecorderTheme(darkTheme = false) {
         Surface(modifier = Modifier.fillMaxSize()) {
-            Box(modifier = Modifier.fillMaxSize()) {
-                FileNameFormatDialog(
-                    initialFormat = AppPreferences.DefaultsValue.FILE_NAME_TEMPLATE,
-                    onConfirm = {},
-                    onDismiss = {}
-                )
-            }
+            FileNameFormatDialog(
+                initialFormat = AppPreferences.DefaultsValue.FILE_NAME_TEMPLATE,
+                onConfirm = {},
+                onDismiss = {}
+            )
         }
     }
 }

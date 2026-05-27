@@ -216,7 +216,13 @@ fun ContactSelectionContent(
                 Row(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    TextButton(onClick = onDismiss) {
+                    TextButton(
+                        onClick = onDismiss,
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = MaterialTheme.colorScheme.error,
+                            contentColor = MaterialTheme.colorScheme.onError
+                        )
+                    ) {
                         Text(stringResource(R.string.general_cancel))
                     }
                     Spacer(modifier = Modifier.width(8.dp))
