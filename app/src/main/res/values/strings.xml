@@ -123,7 +123,7 @@
     <string name="settings_file_name_template_placeholders_preview">Preview: %1$s</string>
     <string name="placeholder_date_desc">The current date and time</string>
     <string name="placeholder_direction_desc">The call direction (in/out)</string>
-    <string name="placeholder_phone_number_desc">The best available phone number</string>
+    <string name="placeholder_phone_number_desc">The phone number</string>
     <string name="placeholder_contact_name_desc">The contact name, if available</string>
     <string name="placeholder_cross_country_desc">Indicates if the call is cross-country (true/false)</string>
 
