@@ -88,6 +88,9 @@
     <string name="permission_call_log_label">Call Log</string>
     <string name="permission_call_log_description">Required so we receive the unredacted phone number on phone state events.</string>
 
+    <string name="permission_manage_ongoing_calls_label">Manage Ongoing Calls</string>
+    <string name="permission_manage_ongoing_calls_description">AppOps permission automatically granted with Shizuku. Required to detect calls with InCallService.</string>
+
     <string name="permission_battery_label">Battery Optimization</string>
     <string name="permission_battery_description">Keeps the app alive when it needs and allow to bypass possible background startup limitations.</string>
 
@@ -117,17 +120,29 @@
     <string name="settings_shizuku_keep_alive_desc">Do not send the stop intent</string>
 
     <!-- Settings Screen: Recording Section -->
+    <string name="settings_call_detection_method">Call Detection Method</string>
+    <string name="settings_call_detection_method_warning_title">Limited Support Notice</string>
+    <string name="call_detection_mode_phonestate_title">Phone State</string>
+    <string name="call_detection_mode_phonestate_description">Use the legacy phone state broadcast with deprecated fields. This mode is a very prone to race conditions and give us a limited amount of informations.</string>
+    <string name="call_detection_mode_phonestate_limited_support">This call detection method is unreliable. We retrieve a deprecated value when receiving phone state updates, and the detection logic is prone to race conditions. We also cannot differentiate between carrier calls and third-party calls. However, you can work around this limitation by ignoring anonymous calls.</string>
+    <string name="call_detection_mode_incallservice_title">InCallService</string>
+    <string name="call_detection_mode_incallservice_description">Use the modern InCallService API. This mode is more efficient and should provide better detection with a lot of informations.</string>
+
+    <string name="settings_record_third_party_calls">Record third-party apps</string>>
+    <string name="settings_record_third_party_calls_description">Record calls from third-party that integrate with Android telecom system. May result in silent or one-sided recordings.</string>
+
     <string name="settings_tap_to_select_folder">Tap to select folder...</string>
     <string name="settings_recording_folder_label">Recording Folder</string>
 
     <string name="settings_file_name_template">File Name Template</string>
-    <string name="settings_file_name_template_placeholders">Placeholders:</string>
+    <string name="settings_file_name_template_placeholders">Placeholders for %s :</string>
     <string name="settings_file_name_template_placeholders_preview">Preview: %1$s</string>
     <string name="placeholder_date_desc">The current date and time</string>
     <string name="placeholder_direction_desc">The call direction (in/out)</string>
     <string name="placeholder_phone_number_desc">The phone number</string>
-    <string name="placeholder_contact_name_desc">The contact name, if available</string>
+    <string name="placeholder_caller_name_desc">The name of the caller, look at the contacts list first, fallback to telecom CallerID when available</string>
     <string name="placeholder_cross_country_desc">Indicates if the call is cross-country (true/false)</string>
+    <string name="placeholder_package_name_desc">The name or package name of the app that initiated the call.</string>
 
     <string name="settings_auto_record_incoming">Automatically record incoming calls</string>
     <string name="settings_auto_record_outgoing">Automatically record outgoing calls</string>

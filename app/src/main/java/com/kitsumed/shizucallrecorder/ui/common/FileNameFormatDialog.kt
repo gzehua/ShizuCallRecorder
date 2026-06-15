@@ -9,7 +9,6 @@
 package com.kitsumed.shizucallrecorder.ui.common
 
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -29,10 +28,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
@@ -42,20 +39,23 @@ import androidx.compose.ui.unit.dp
 import com.kitsumed.shizucallrecorder.R
 import com.kitsumed.shizucallrecorder.integrations.scrcpy.ScrcpyAudioCodec
 import com.kitsumed.shizucallrecorder.data.AppPreferences
-import com.kitsumed.shizucallrecorder.data.recordings.RecordingDirection
-import com.kitsumed.shizucallrecorder.data.recordings.RecordingMetadata
+import com.kitsumed.shizucallrecorder.data.call.CallDirection
+import com.kitsumed.shizucallrecorder.data.call.EnrichedCallData
+import com.kitsumed.shizucallrecorder.services.callDetection.CallDetectionMode
 import com.kitsumed.shizucallrecorder.ui.theme.ShizucallrecorderTheme
 import com.kitsumed.shizucallrecorder.utils.RecordingFileNameFormatter
 
 /**
  * Dialog for selecting file name format.
  * @param initialFormat The format string to show when the dialog opens, usually the currently saved user preference.
+ * @param activeMode The currently active CallDetectionMode, used to filter and indicate which placeholders are supported/expected to work in the current mode.
  * @param onConfirm Called with the new format string when the user taps "OK".
  * @param onDismiss Called when the user taps "Cancel" or outside the dialog.
  */
 @Composable
 fun FileNameFormatDialog(
     initialFormat: String,
+    activeMode: CallDetectionMode,
     onConfirm: (String) -> Unit,
     onDismiss: () -> Unit
 ) {
@@ -63,12 +63,12 @@ fun FileNameFormatDialog(
     val context = LocalContext.current
 
     val previewState = remember(text) {
-        val fakeMetadata = RecordingMetadata(
-            rawPhoneNumber = "+1234567890",
-            direction = RecordingDirection.INCOMING,
-            standardizedNumber = "+1234567890",
+        val fakeMetadata = EnrichedCallData(
+            normalisedPhoneNumber = "+1234567890",
+            direction = CallDirection.INCOMING,
+            formattedE164Number = "+1234567890",
             isCrossCountry = false,
-            isEnriched = true
+            callerName = "John Doe"
         )
         val result = RecordingFileNameFormatter.formatFileName(
             context, fakeMetadata, ScrcpyAudioCodec.OPUS, customFormat = text
@@ -76,7 +76,10 @@ fun FileNameFormatDialog(
         result
     }
 
-    val placeholders = RecordingFileNameFormatter.FileNamePlaceholder.entries
+    val placeholders = remember(activeMode) {
+        RecordingFileNameFormatter.FileNamePlaceholder.entries
+            .filter { activeMode in it.supportedModes }
+    }
     val descriptionsTexts = placeholders.map { stringResource(it.descriptionResId) }
 
     val descriptions = buildAnnotatedString {
@@ -104,7 +107,7 @@ fun FileNameFormatDialog(
                 )
 
                 Text(
-                    text = stringResource(R.string.settings_file_name_template_placeholders),
+                    text = stringResource(R.string.settings_file_name_template_placeholders, stringResource(activeMode.titleResId)),
                     style = MaterialTheme.typography.labelMedium,
                     fontWeight = FontWeight.Bold
                 )
@@ -159,6 +162,7 @@ private fun SettingsScreenPreview() {
         Surface(modifier = Modifier.fillMaxSize()) {
             FileNameFormatDialog(
                 initialFormat = AppPreferences.DefaultsValue.FILE_NAME_TEMPLATE,
+                activeMode = CallDetectionMode.InCallService,
                 onConfirm = {},
                 onDismiss = {}
             )
