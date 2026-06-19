@@ -77,11 +77,13 @@ jobs:
         with:
           validate-wrappers: true # Verify Gradle wrapper integrity to prevent supply chain attacks from bad-actor wrapper file in the git repo
           cache-provider: basic # DO NOT REMOVE, gradle V6 made controversial OPT-IN BY DEFAULT NEW TERMS FOR THEIR NEW PROPRIETARY "ADVANCED CACHING". basic is previous MIT FOSS caching variant with no terms.
-          gradle-version: wrapper # Tells the action to look at gradle-wrapper.properties file and download the right version
+          gradle-version: '9.4.1' # Replicate the same version as gradle-wrapper.properties used by Android Studio
           # In the weird case where we could run this CI on a PRs from forks, cache is read-only to prevents cache poisoning.
           cache-read-only: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name != github.repository }}
 
       - name: Generate Missing Gradle Wrapper Scripts
+        env:
+          SKIP_SIGNING: true # Prevent build.gradle.kts from throwing error due to missing signing info
         run: gradle wrapper
       
       # Determine build type and set outputs of the build job
@@ -99,14 +101,18 @@ jobs:
       # Set up signing for release builds
       # Signing keystore is stored as a base64-encoded secret
       - name: Decode Keystore
-        if: ${{ steps.set-output.outputs.BUILD_TYPE != 'debug' }}
         run: |
           # Decode the keystore from base64 secret
           echo "${{ secrets.SIGNING_KEYSTORE }}" | base64 -d > app/release-keystore.jks
-          
+        
       # Build Debug APK (for Debug Asset type)
       - name: Build Debug APK
         if: ${{ steps.set-output.outputs.BUILD_TYPE == 'debug' }}
+        env:
+          KEYSTORE_FILE: release-keystore.jks
+          KEYSTORE_PASSWORD: ${{ secrets.SIGNING_KEYSTORE_PASSWORD }}
+          KEY_ALIAS: ${{ secrets.SIGNING_KEY_ALIAS }}
+          KEY_PASSWORD: ${{ secrets.SIGNING_KEY_PASSWORD }}
         run: ./gradlew assembleDebug -PversionName=${{ inputs.version }} -PversionCode=${{ github.run_number }} -PciBuildNumber=${{ github.run_id }} --no-daemon --stacktrace
 
       # Build Release APK (for Release/Pre-Release types)
