@@ -133,6 +133,9 @@ fun AppNavigationScreen() {
                 if (showSponsorScreen) {
                     SponsorScreen( onDismiss = {
                         preferences.setLastForcedReminderSupportProjectTimeInApp(currentTime)
+                        // We also update the notification time since it work by opening the app and then having this logic
+                        // show the sponsor screen. Showing it again after they have already seen it would be annoying.
+                        preferences.setLastForcedReminderSupportProjectTimeNotification(currentTime)
                         showSponsorScreen = false // Trigger recompose
                     })
                 } else {
