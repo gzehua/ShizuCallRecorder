@@ -84,11 +84,11 @@ class RecordingDecisionEngine private constructor(context: Context) {
         AppLogger.d(TAG, "Enriched call data: BestNumber=${enrichedData.getBestNumber()}, crossCountry=${enrichedData.isCrossCountry}")
 
         // Step 2: Evaluate recording decision
-        val shouldRecord = shouldAutoRecord(enrichedData)
-        AppLogger.i(TAG, "Recording decision for ${enrichedData.direction} call: shouldRecord=$shouldRecord")
+        val shouldAutoRecord = shouldAutoRecord(enrichedData)
+        AppLogger.i(TAG, "Recording decision for ${enrichedData.direction} call is: shouldAutoRecord=$shouldAutoRecord")
 
         // Step 3: Fire appropriate Intent
-        return fireRecordingServiceIntent(enrichedData, shouldRecord)
+        return fireRecordingServiceIntent(enrichedData, shouldAutoRecord)
     }
 
     /**
@@ -164,7 +164,6 @@ class RecordingDecisionEngine private constructor(context: Context) {
             return false
         }
 
-        AppLogger.i(TAG, "Auto-record enabled for this incoming call")
         return true
     }
 
@@ -200,7 +199,6 @@ class RecordingDecisionEngine private constructor(context: Context) {
             return false
         }
 
-        AppLogger.i(TAG, "Auto-record enabled for this outgoing call")
         return true
     }
 
@@ -250,11 +248,11 @@ class RecordingDecisionEngine private constructor(context: Context) {
      * Fires an Intent to [RecordingForegroundService] with the appropriate action.
      *
      * @param enrichedData The enriched call data to attach to the intent
-     * @param shouldRecord If true, fires ACTION_START_RECORDING; otherwise ACTION_STANDBY
+     * @param shouldAutoRecord If true, fires ACTION_START_RECORDING; otherwise ACTION_STANDBY
      * @return true if the intent was fired successfully, false if there was an error
      */
-    private fun fireRecordingServiceIntent(enrichedData: EnrichedCallData, shouldRecord: Boolean): Boolean {
-        val action = if (shouldRecord) {
+    private fun fireRecordingServiceIntent(enrichedData: EnrichedCallData, shouldAutoRecord: Boolean): Boolean {
+        val action = if (shouldAutoRecord) {
             AppLogger.i(TAG, "Firing Intent: ACTION_START_RECORDING for ${enrichedData.direction} call")
             RecordingForegroundService.ACTION_START_RECORDING
         } else {

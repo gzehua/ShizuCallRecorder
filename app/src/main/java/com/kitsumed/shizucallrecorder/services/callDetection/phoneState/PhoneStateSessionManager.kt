@@ -90,7 +90,7 @@ class PhoneStateSessionManager private constructor(context: Context) {
 
                 val isSameCallDirection = field?.direction == value.direction
                 // Verification Window: We had nothing, now we have a real number
-                val isLateNumberDiscovery = field?.rawPhoneNumber.isNullOrBlank() && value.rawPhoneNumber.isBlank()
+                val isLateNumberDiscovery = field?.rawPhoneNumber.isNullOrBlank() && !value.rawPhoneNumber.isBlank()
 
                 if (isSameCallDirection && isLateNumberDiscovery && !wasRecordingServiceStartIntentSend) {
                     // We are in the same direction, but we previously had a blank/unknown number, and now we have a real number! This is part of the
@@ -98,9 +98,10 @@ class PhoneStateSessionManager private constructor(context: Context) {
                     // it's the same call session, we want to allow updating the phone number. The only exception is if we already sent a start intent to
                     // the RecordingForegroundService, in that case we want to keep the original metadata for consistency between the two, even if it's anonymous.
                     field = value
+                    AppLogger.d(TAG, "Updated ongoing session call metadata with late number discovery: ${value.rawPhoneNumber} for direction ${value.direction}.")
                 } else
                 {
-                    AppLogger.v(TAG, "Attempted to change ongoing session call metadata from ${field?.direction} to ${value.direction}. This is not allowed since the current session is already locked.")
+                    AppLogger.d(TAG, "Attempted to change ongoing session call metadata from ${field?.direction} to ${value.direction}. This is not allowed since the current session is already locked. isSameCallDirection=$isSameCallDirection, isLateNumberDiscovery=$isLateNumberDiscovery, wasRecordingServiceStartIntentSend=${wasRecordingServiceStartIntentSend}")
                 }
             }
 

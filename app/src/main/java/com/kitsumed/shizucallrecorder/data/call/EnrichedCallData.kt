@@ -72,6 +72,7 @@ data class EnrichedCallData(
                 val parsedNumber = phoneNumberManager.parsePhoneNumber(raw)
                 // If parsing failed
                 if (parsedNumber == null) {
+                    AppLogger.w(TAG, "Failed to parse phone number '$raw', skipping enrichment.")
                     return@withContext EnrichedCallData(
                         normalisedPhoneNumber = PhoneNumberManager.normalisePhoneNumber(raw), // Safety normalizing, the number should already have been.
                         direction = base.direction,
