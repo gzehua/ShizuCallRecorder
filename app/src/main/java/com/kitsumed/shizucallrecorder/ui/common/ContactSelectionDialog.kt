@@ -10,6 +10,8 @@ package com.kitsumed.shizucallrecorder.ui.common
 
 import android.graphics.ImageDecoder
 import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -173,11 +175,12 @@ fun ContactSelectionContent(
                     ContactListItem(
                         contact = contact,
                         isSelected = isSelected,
+                        modifier = Modifier.animateItem(), // This handles the entry, exit, and reordering animations in the list
                         onToggle = {
-                            // Directly mutate the observable list. Because selectedNumbers is
-                            // a mutableStateListOf, Compose triggers a refresh (recompose)
-                            // only for this item's row — not the entire list.
                             if (isSelected) {
+                                // Directly mutate the observable list. Because selectedNumbers is
+                                // a mutableStateListOf, Compose triggers a refresh (recompose)
+                                // only for this item's row — not the entire list.
                                 selectedNumbers.remove(contact.number)
                             } else {
                                 selectedNumbers.add(contact.number)
@@ -251,7 +254,8 @@ fun ContactSelectionContent(
 private fun ContactListItem(
     contact: ContactEntry,
     isSelected: Boolean,
-    onToggle: () -> Unit
+    onToggle: () -> Unit,
+    modifier: Modifier = Modifier
 ) {
     // Smooth M3 background colour transition when the selection state changes.
     val backgroundColor by animateColorAsState(
@@ -259,12 +263,11 @@ private fun ContactListItem(
             MaterialTheme.colorScheme.secondaryContainer
         else
             Color.Transparent,
-        label = "selection_bg_anim"
+        label = "selection_bg_anim",
     )
     // Surface provides the correct background for dark-theme compatibility.
     Surface(
-        modifier = Modifier
-            .fillMaxSize(),
+        modifier = modifier.fillMaxWidth(),
         color = MaterialTheme.colorScheme.background,
     ) {
         ListItem(
@@ -274,15 +277,14 @@ private fun ContactListItem(
                     value = isSelected,
                     onValueChange = { onToggle() },
                     role = Role.Checkbox // Accessibility: Tells TalkBack this is a checkbox behavior
-                )
-                .background(backgroundColor),
+                ),
             headlineContent = {
                 Text(contact.name, fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Normal)
             },
             supportingContent = { Text(contact.number) },
             leadingContent = { ContactAvatar(contact) },
             colors = ListItemDefaults.colors(
-                containerColor = Color.Transparent // Background is applied via the modifier above.
+                containerColor = backgroundColor // Background is applied via the modifier above.
             )
         )
     }
@@ -349,7 +351,7 @@ fun PreviewContactSelectionDialog() {
     )
     val selectedContacts = setOf("+1 555-0202")
 
-    ShizucallrecorderTheme(darkTheme = false) {
+    ShizucallrecorderTheme(darkTheme = true) {
         ContactSelectionContent(
             title = stringResource(R.string.settings_select_contacts, selectedContacts.count()),
             contacts = dummyContacts,

@@ -14,6 +14,7 @@ import android.os.Build
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatDelegate
+import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.LinearOutSlowInEasing
 import androidx.compose.animation.core.Spring
@@ -23,6 +24,7 @@ import androidx.compose.animation.expandVertically
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.shrinkVertically
+import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -559,21 +561,34 @@ private fun RecordingSection(
             modifier = Modifier.padding(horizontal = 16.dp, vertical = 2.dp)
         )
 
-        // These settings are only working with InCallService detection mode.
-        if (callDetectionMode == CallDetectionMode.InCallService) {
-            ToggleListItem(
-                label           = stringResource(R.string.settings_record_third_party_calls),
-                description     = stringResource(R.string.settings_record_third_party_calls_description),
-                checked         = recordThirdPartyCalls,
-                onCheckedChange = { actions.setRecordThirdPartyCalls(it) }
-            )
-        } else { // Show a warning for PhoneState broadcast method
-             WarningCard(
-                modifier = Modifier.padding(horizontal = 12.dp, vertical = 8.dp),
-                title = stringResource(R.string.settings_call_detection_method_warning_title),
-                message = stringResource(R.string.call_detection_mode_phonestate_limited_support))
-        }
+        AnimatedContent(
+            targetState = callDetectionMode,
+            transitionSpec = {
+                val enterTransition = fadeIn(tween(300)) + expandVertically(tween(300))
+                val exitTransition = fadeOut(tween(250)) + shrinkVertically(tween(250))
 
+                enterTransition togetherWith exitTransition
+            },
+            label = "CallDetectionModeSettingsTransition"
+        ) { targetMode ->
+            when (targetMode) {
+                CallDetectionMode.InCallService -> {
+                    ToggleListItem(
+                        label           = stringResource(R.string.settings_record_third_party_calls),
+                        description     = stringResource(R.string.settings_record_third_party_calls_description),
+                        checked         = recordThirdPartyCalls,
+                        onCheckedChange = { actions.setRecordThirdPartyCalls(it) }
+                    )
+                }
+                CallDetectionMode.PhoneState -> {
+                    WarningCard(
+                        modifier = Modifier.padding(horizontal = 12.dp, vertical = 8.dp),
+                        title = stringResource(R.string.settings_call_detection_method_warning_title),
+                        message = stringResource(R.string.call_detection_mode_phonestate_limited_support)
+                    )
+                }
+            }
+        }
 
         HorizontalDivider(modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp), thickness = 0.5.dp)
 

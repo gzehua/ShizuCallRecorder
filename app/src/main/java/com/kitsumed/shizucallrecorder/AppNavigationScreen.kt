@@ -8,6 +8,13 @@
 
 package com.kitsumed.shizucallrecorder
 
+import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideOutHorizontally
+import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
@@ -107,41 +114,55 @@ fun AppNavigationScreen() {
 
     // -------- Show the right screen
     ShizucallrecorderTheme(darkTheme = darkTheme, dynamicColor = dynamicColor) {
-        when (screenState) {
-            AppScreen.Disclaimer -> DisclaimerScreen(
-                onContinue = {
-                    preferences.setDisclaimerAccepted(true)
-                    appNavViewModel.refresh()
-                }
-            )
+        AnimatedContent(
+            targetState = screenState,
+            transitionSpec = {
+                val movingForward = targetState.ordinal > initialState.ordinal
+                // Slide in from the right when moving forward (1), slide out to the left when moving forward (-1).
+                val slideDirection = if (movingForward) 1 else -1
 
-            AppScreen.Permissions -> PermissionsScreen(
-                status              = onboardingStatus,
-                onPermissionGranted = { appNavViewModel.refresh() }
-            )
+                val enterSpec = slideInHorizontally(tween(350)) { width -> width * slideDirection } + fadeIn(tween(350))
+                val exitSpec = slideOutHorizontally(tween(300)) { width -> -width * slideDirection } + fadeOut(tween(300))
 
-            AppScreen.Settings -> {
-                val lastReminderTime = preferences.getLastForcedReminderSupportProjectTimeInApp()
-                val currentTime = System.currentTimeMillis()
+                enterSpec togetherWith exitSpec
+            },
+            label = "AppScreenNavigationTransition"
+        ) { targetScreenState ->
+            when (targetScreenState) {
+                AppScreen.Disclaimer -> DisclaimerScreen(
+                    onContinue = {
+                        preferences.setDisclaimerAccepted(true)
+                        appNavViewModel.refresh()
+                    }
+                )
 
-                // Create a local state initialized by your time check
-                var showSponsorScreen by remember {
-                    // Check if it's been more than a year since the last reminder. 31536000000 milliseconds = 1 year.
-                    mutableStateOf(currentTime - lastReminderTime > 31536000000L)
-                }
+                AppScreen.Permissions -> PermissionsScreen(
+                    status              = onboardingStatus,
+                    onPermissionGranted = { appNavViewModel.refresh() }
+                )
 
-                if (showSponsorScreen) {
-                    SponsorScreen( onDismiss = {
-                        preferences.setLastForcedReminderSupportProjectTimeInApp(currentTime)
-                        // We also update the notification time since it work by opening the app and then having this logic
-                        // show the sponsor screen. Showing it again after they have already seen it would be annoying.
-                        preferences.setLastForcedReminderSupportProjectTimeNotification(currentTime)
-                        showSponsorScreen = false // Trigger recompose
-                    })
-                } else {
-                    SettingsScreen(
-                        viewModel = settingsViewModel
-                    )
+                AppScreen.Settings -> {
+                    val lastReminderTime = preferences.getLastForcedReminderSupportProjectTimeInApp()
+                    val currentTime = System.currentTimeMillis()
+
+                    var showSponsorScreen by remember {
+                        // Check if it's been more than a year since the last reminder. 31536000000 ms = 1 year.
+                        mutableStateOf(currentTime - lastReminderTime > 31536000000L)
+                    }
+
+                    if (showSponsorScreen) {
+                        SponsorScreen(onDismiss = {
+                            preferences.setLastForcedReminderSupportProjectTimeInApp(currentTime)
+                            // We also update the notification time since it work by opening the app and then having this logic
+                            // show the sponsor screen. Showing it again after they have already seen it would be annoying.
+                            preferences.setLastForcedReminderSupportProjectTimeNotification(currentTime)
+                            showSponsorScreen = false // Trigger recompose
+                        })
+                    } else {
+                        SettingsScreen(
+                            viewModel = settingsViewModel
+                        )
+                    }
                 }
             }
         }

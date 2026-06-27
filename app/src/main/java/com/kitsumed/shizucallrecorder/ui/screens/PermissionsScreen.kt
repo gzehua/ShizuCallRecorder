@@ -13,8 +13,14 @@ import android.app.AlertDialog
 import android.content.Intent
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.tween
+import androidx.compose.animation.expandVertically
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.shrinkVertically
+import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -164,6 +170,7 @@ fun PermissionsContent(
     onCallDetectionModeChanged: (CallDetectionMode) -> Unit,
     modifier: Modifier = Modifier
 ) {
+
     Surface(
         modifier = modifier
             .navigationBarsPadding()
@@ -246,16 +253,34 @@ fun PermissionsContent(
                     }
                 )
 
-                // Show the required permissions for the selected call detection mode
-                status.callDetectionMode.requiredPermissions.forEach { currentPermission ->
-                    val isGranted = status.callDetectionModeGrantedPermissions.contains(currentPermission)
-                    PermissionCard(
-                        label = stringResource(currentPermission.titleResId),
-                        description = stringResource(currentPermission.descriptionResId),
-                        granted = isGranted,
-                        iconOverride = currentPermission.icon
-                    )
+                AnimatedContent(
+                    targetState = status.callDetectionMode,
+                    transitionSpec = {
+                        val enterTransition = fadeIn(tween(300)) + expandVertically(tween(300))
+                        val exitTransition = fadeOut(tween(250)) + shrinkVertically(tween(250))
+
+                        enterTransition togetherWith exitTransition
+                    },
+                    label = "CallDetectionModeSettingsTransition"
+                ) { selectedCallDetectionMode ->
+                    // Child-Column required so cards don't show on top of each other
+                    Column(
+                        verticalArrangement = Arrangement.spacedBy(12.dp)
+                    ) {
+                        // Show the required permissions for the selected call detection mode
+                        selectedCallDetectionMode.requiredPermissions.forEach { currentPermission ->
+                            val isGranted = status.callDetectionModeGrantedPermissions.contains(currentPermission)
+                            PermissionCard(
+                                label = stringResource(currentPermission.titleResId),
+                                description = stringResource(currentPermission.descriptionResId),
+                                granted = isGranted,
+                                iconOverride = currentPermission.icon
+                            )
+                        }
+                    }
                 }
+
+
             }
 
             // Footer with action button
